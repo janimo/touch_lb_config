@@ -1,0 +1,4 @@
+export PROJECT=ubuntu-touch SUITE=saucy ARCH=i386 PREINSTALLED=true IMAGEFORMAT=plain
+lb config
+sudo lb build
+
