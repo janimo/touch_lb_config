@@ -407,6 +407,7 @@ esac
 
 lb config noauto \
 	--mode ubuntu \
+	-a $ARCH \
 	--distribution "$SUITE" \
 	--bootstrap-keyring ubuntu-keyring \
 	--binary-images "$BINARY_IMAGES" \
