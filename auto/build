@@ -235,7 +235,7 @@ deb file:/var/lib/preinstalled-pool/ $LB_DISTRIBUTION $LB_PARENT_ARCHIVE_AREAS
 			> chroot/etc/apt/sources.list
 		rm chroot/etc/apt/sources.list.preinstall chroot/etc/apt/sources.list.orig
 	fi
-	if [ "$PROJECT" = "ubuntu-touch" ] && [ "$ARCH" = "armhf" ]; then
+	if [ "$PROJECT" = "ubuntu-touch" ]; then
 		INFO_DESC="$(lsb_release -d -s)"
 		echo "$INFO_DESC - $ARCH ($BUILDSTAMP)" >chroot/etc/media-info
 		mkdir -p chroot/var/log/installer
@@ -409,9 +409,10 @@ if [ "$SUBARCH" = "ac100" ] || [ "$SUBARCH" = "nexus7" ]; then
 
 fi
 
-if [ "$PROJECT" = "ubuntu-touch" ] && [ "$ARCH" = "armhf" ]; then
-	touchsubarches="maguro manta grouper mako"
-
+if [ "$PROJECT" = "ubuntu-touch" ]; then
+	if [ "$ARCH" = armhf ]; then
+		touchsubarches="maguro manta grouper mako"
+	fi
 	sourceslist="chroot/etc/apt/sources.list"
 
 	lb chroot_proc install "$@"
@@ -429,7 +430,9 @@ if [ "$PROJECT" = "ubuntu-touch" ] && [ "$ARCH" = "armhf" ]; then
 	mv "${sourceslist}.d" "${sourceslist}.d.orig"
 	echo "deb $LB_PARENT_MIRROR_CHROOT saucy main universe multiverse restricted" >$sourceslist
 	Chroot chroot "apt-get -y update"
-	Chroot chroot "apt-get -y install android"
+	if [ "$ARCH" = armhf ]; then
+		Chroot chroot "apt-get -y install android"
+	fi
 
 	REL="$LB_DISTRIBUTION"
 	for subarch in $touchsubarches; do
